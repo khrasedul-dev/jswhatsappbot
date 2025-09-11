@@ -1,8 +1,7 @@
 import 'dotenv/config'
-import WhatsAppBot, { Markup } from '../index.js'
+import WhatsAppBot, { Markup, session, Scene, SceneManager } from '../index.js'
 import logger from '../middlewares/logger.js'
-import { Scene, SceneManager } from '../scenes.js'
-import { session } from '../session.js'
+
 
 // --- Bot Setup ---
 const bot = new WhatsAppBot({

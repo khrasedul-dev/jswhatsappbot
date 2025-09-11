@@ -3,6 +3,8 @@ import express from 'express'
 import Context from './context.js'
 import Markup from './markup.js'
 import { sessionStore as defaultSessionStore } from './sessionStore.js'
+import {session} from './session.js'
+import { Scene, SceneManager } from './scenes.js'
 
 class WhatsAppBot {
   catch(fn) {
@@ -239,4 +241,4 @@ class WhatsAppBot {
 }
 
 export default WhatsAppBot
-export { Markup }
+export { Markup , session , Scene, SceneManager }
