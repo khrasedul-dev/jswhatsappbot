@@ -57,9 +57,11 @@ bot.use(session())
 bot.use(scenes.middleware())
 
 // --- Commands ---
-bot.command('/start', async (ctx) => {
+bot.command(["/start", "/help"], async (ctx) => {
   await ctx.reply('Welcome! Type /registration to begin.')
 })
+
+bot.hears(["hi", "hello", /test/], ctx => ctx.reply('Hello! How can I assist you today?'))
 
 bot.command('/registration', async (ctx) => {
   await scenes.enter('registration')(ctx)

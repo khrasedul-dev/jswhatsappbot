@@ -52,7 +52,21 @@ class WhatsAppBot {
 
   command(cmd, fn) {
     this.on('message', (ctx) => {
-      if (ctx.text && ctx.text === cmd) fn(ctx)
+      if (!ctx.text || ctx._handled) return
+      if (Array.isArray(cmd)) {
+        for (const c of cmd) {
+          if (ctx.text === c) {
+            ctx._handled = true
+            fn(ctx)
+            break
+          }
+        }
+      } else {
+        if (ctx.text === cmd) {
+          ctx._handled = true
+          fn(ctx)
+        }
+      }
     })
   }
 
@@ -65,8 +79,19 @@ class WhatsAppBot {
   hears(pattern, fn) {
     this.on('message', (ctx) => {
       if (!ctx.text || ctx._handled) return
-      if (typeof pattern === 'string') {
-        // Exact match only for string
+      if (Array.isArray(pattern)) {
+        for (const p of pattern) {
+          if (typeof p === 'string' && ctx.text === p) {
+            ctx._handled = true
+            fn(ctx)
+            break
+          } else if (p instanceof RegExp && p.test(ctx.text)) {
+            ctx._handled = true
+            fn(ctx)
+            break
+          }
+        }
+      } else if (typeof pattern === 'string') {
         if (ctx.text === pattern) {
           ctx._handled = true
           fn(ctx)

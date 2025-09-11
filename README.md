@@ -77,7 +77,14 @@ await ctx.replyWithAudio('https://example.com/audio.mp3')
 await ctx.replyWithVideo('https://example.com/video.mp4')
 ```
 
-## Example: Registration Scene
+### Multiple  patterns
+
+```js
+bot.hears(["hi", "hello", /test/], handler)
+bot.command(["/start", "/help"], handler)
+```
+
+### Example: Registration Scene
 
 ```js
 import WhatsAppBot, { Markup } from 'jswhatsappbot'
