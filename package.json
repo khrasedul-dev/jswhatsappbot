@@ -1,9 +1,22 @@
 {
   "name": "jswhatsappbot",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "A modern telegraf-style framework for WhatsApp bots.",
   "main": "index.js",
   "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
+  "files": [
+    "index.js",
+    "context.js",
+    "markup.js",
+    "scenes.js",
+    "session.js",
+    "sessionStore.js",
+    "middlewares/",
+    "tests/"
+  ],
   "keywords": [
     "whatsappjs",
     "bot",
@@ -15,13 +28,15 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/khrasedul-dev/whatsappjs.git"
+    "url": "git+https://github.com/khrasedul-dev/jswhatsappbot.git"
   },
   "bugs": {
-    "url": "https://github.com/khrasedul-dev/whatsappjs/issues"
+    "url": "https://github.com/khrasedul-dev/jswhatsappbot/issues"
   },
-  "homepage": "https://github.com/khrasedul-dev/whatsappjs#readme",
+  "homepage": "https://github.com/khrasedul-dev/jswhatsappbot#readme",
   "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "test": "echo \"No tests yet\""
   },
   "dependencies": {
@@ -29,6 +44,7 @@
     "express": "^4.18.2"
   },
   "devDependencies": {
-    "dotenv": "^17.2.2"
+    "dotenv": "^17.2.2",
+    "nodemon": "^3.0.2"
   }
 }

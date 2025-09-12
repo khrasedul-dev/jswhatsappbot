@@ -87,7 +87,7 @@ bot.command(["/start", "/help"], handler)
 ### Example: Registration Scene
 
 ```js
-import WhatsAppBot, { Markup, session, Scene, SceneManager } from '../index.js'
+import WhatsAppBot, { Markup, session, Scene, SceneManager } from 'jswhatsappbot'
 
 const bot = new WhatsAppBot({
   accessToken: process.env.WHATSAPP_ACCESS_TOKEN,
