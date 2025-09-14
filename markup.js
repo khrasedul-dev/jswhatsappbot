@@ -7,7 +7,7 @@ class Markup {
     }
   }
 
-  static keyboard(buttonRows, text) {
+  static keyboard(text, buttonRows) {
     // WhatsApp only supports one row and max 3 buttons for reply buttons
     if (!Array.isArray(buttonRows) || buttonRows.length !== 1) {
       throw new Error(

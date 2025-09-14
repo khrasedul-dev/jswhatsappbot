@@ -1,7 +1,6 @@
 import 'dotenv/config'
-import WhatsAppBot, { Markup, session, Scene, SceneManager } from '../index.js'
+import WhatsAppBot, { Markup, Scene, SceneManager, session } from '../index.js'
 import logger from '../middlewares/logger.js'
-
 
 // --- Bot Setup ---
 const bot = new WhatsAppBot({
@@ -56,11 +55,13 @@ bot.use(session())
 bot.use(scenes.middleware())
 
 // --- Commands ---
-bot.command(["/start", "/help"], async (ctx) => {
+bot.command(['/start', '/help'], async (ctx) => {
   await ctx.reply('Welcome! Type /registration to begin.')
 })
 
-bot.hears(["hi", "hello", /test/], ctx => ctx.reply('Hello! How can I assist you today?'))
+bot.hears(['hi', 'hello', /test/], (ctx) =>
+  ctx.reply('Hello! How can I assist you today?')
+)
 
 bot.command('/registration', async (ctx) => {
   await scenes.enter('registration')(ctx)
@@ -79,7 +80,7 @@ bot.hears('/photo', async (ctx) => {
   await ctx.replyWithPhoto(testPhotoUrl)
   // Then send buttons as a separate text message
   await ctx.reply(
-    Markup.keyboard([[{ text: 'Yes' }, { text: 'No' }]], 'Choose an option:')
+    Markup.keyboard('Choose an option:', [[{ text: 'Yes' }, { text: 'No' }]])
   )
 })
 
@@ -109,10 +110,9 @@ bot.on('video', async (ctx) => {
 // --- Keyboard and Button Replies ---
 bot.hears('/keyboard', async (ctx) => {
   await ctx.reply(
-    Markup.keyboard(
-      [[{ text: 'Yes' }, { text: 'No' }, { text: 'test button' }]],
-      'Choose an option:'
-    )
+    Markup.keyboard('Choose an option:', [
+      [{ text: 'Yes' }, { text: 'No' }, { text: 'test button' }],
+    ])
   )
 })
 
@@ -132,10 +132,9 @@ bot.hears('No', async (ctx) => {
 
 bot.hears('inlineKeyboard', async (ctx) => {
   await ctx.reply(
-    Markup.keyboard(
-      [[{ text: 'Button 1' }, { text: 'Button 2' }, { text: 'Visit Google' }]],
-      'Click a button:'
-    )
+    Markup.keyboard('Click a button:', [
+      [{ text: 'Button 1' }, { text: 'Button 2' }, { text: 'Button 3' }],
+    ])
   )
 })
 
@@ -162,7 +161,6 @@ bot.hears(/no/i, async (ctx) => {
 
 // --- Log all messages ---
 bot.on('message', async (ctx) => {
-  if (ctx._handled) return
   console.log('Generic handler received text:', ctx.text)
   await ctx.reply('Echo: ' + ctx.text)
 })

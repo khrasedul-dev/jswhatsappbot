@@ -1,6 +1,6 @@
 {
   "name": "jswhatsappbot",
-  "version": "1.0.6",
+  "version": "1.1.7",
   "description": "A modern telegraf-style framework for WhatsApp bots.",
   "main": "index.js",
   "type": "module",

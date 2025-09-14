@@ -1,4 +1,3 @@
-
 A **Telegraf-inspired framework** for building **WhatsApp Cloud API bots** with modern **scene** and **session** management.
 
 ## Features
@@ -53,7 +52,7 @@ import { Markup } from 'jswhatsappbot'
 
 ```js
 await ctx.reply(
-  Markup.keyboard([[{ text: 'Yes' }, { text: 'No' }]], 'Choose an option:')
+  Markup.keyboard('Choose an option:', [[{ text: 'Yes' }, { text: 'No' }]])
 )
 ```
 
@@ -77,17 +76,22 @@ await ctx.replyWithAudio('https://example.com/audio.mp3')
 await ctx.replyWithVideo('https://example.com/video.mp4')
 ```
 
-### Multiple  patterns
+### Multiple patterns
 
 ```js
-bot.hears(["hi", "hello", /test/], handler)
-bot.command(["/start", "/help"], handler)
+bot.hears(['hi', 'hello', /test/], handler)
+bot.command(['/start', '/help'], handler)
 ```
 
 ### Example: Registration Scene
 
 ```js
-import WhatsAppBot, { Markup, session, Scene, SceneManager } from 'jswhatsappbot'
+import WhatsAppBot, {
+  Markup,
+  session,
+  Scene,
+  SceneManager,
+} from 'jswhatsappbot'
 
 const bot = new WhatsAppBot({
   accessToken: process.env.WHATSAPP_ACCESS_TOKEN,
@@ -159,7 +163,6 @@ bot.on('message', async (ctx) => {
 import 'dotenv/config'
 import WhatsAppBot, { Markup, session, Scene, SceneManager } from '../index.js'
 
-
 const bot = new WhatsAppBot({
   accessToken: process.env.WHATSAPP_ACCESS_TOKEN,
   verifyToken: process.env.WHATSAPP_VERIFY_TOKEN,
@@ -222,16 +225,15 @@ const testVideoUrl = 'https://www.w3schools.com/html/mov_bbb.mp4'
 bot.hears('/photo', async (ctx) => {
   await ctx.replyWithPhoto(testPhotoUrl)
   await ctx.reply(
-    Markup.keyboard([[{ text: 'Yes' }, { text: 'No' }]], 'Choose an option:')
+    Markup.keyboard('Choose an option:', [[{ text: 'Yes' }, { text: 'No' }]])
   )
 })
 
 bot.hears('/keyboard', async (ctx) => {
   await ctx.reply(
-    Markup.keyboard(
-      [[{ text: 'Yes' }, { text: 'No' }, { text: 'test button' }]],
-      'Choose an option:'
-    )
+    Markup.keyboard('Choose an option:', [
+      [{ text: 'Yes' }, { text: 'No' }, { text: 'test button' }],
+    ])
   )
 })
 
@@ -244,7 +246,6 @@ bot.hears('No', async (ctx) => {
 })
 
 bot.on('message', async (ctx) => {
-  if (ctx._handled) return
   await ctx.reply('Echo: ' + ctx.text)
 })
 
