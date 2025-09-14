@@ -18,7 +18,10 @@ A **Telegraf-inspired framework** for building **WhatsApp Cloud API bots** with 
 npm install jswhatsappbot
 ```
 
+
 ## API
+### Default webhook listen
+- `https://<your site>/webhook`
 
 ### WhatsAppBot
 
