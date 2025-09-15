@@ -1,4 +1,14 @@
+/**
+ * Context for a WhatsApp event. Provides reply helpers and session access.
+ * @class
+ */
 class Context {
+  /**
+   * Creates a Context instance.
+   * @param {WhatsAppBot} bot Bot instance
+   * @param {object} event WhatsApp event object
+   * @param {string} senderId Sender's WhatsApp ID
+   */
   constructor(bot, event, senderId) {
     this.bot = bot
     this.chat = { id: senderId }
@@ -24,13 +34,22 @@ class Context {
     this.video = event.video ? [event.video] : []
   }
 
-  // Reply with text
+  /**
+   * Reply with text or payload.
+   * @param {string|object} textOrPayload Text or message payload
+   * @returns {Promise<object|Error>} API response or error
+   */
   async reply(textOrPayload) {
     this._handled = true
     return this.bot.sendMessage(this.chat.id, textOrPayload)
   }
 
-  // Reply with image
+  /**
+   * Reply with an image.
+   * @param {string} url Image URL
+   * @param {object} [payload] Optional payload for buttons
+   * @returns {Promise<object|Error>} API response or error
+   */
   async replyWithPhoto(url) {
     this._handled = true
     // Support optional Markup payload for buttons
@@ -49,7 +68,11 @@ class Context {
     return this.bot.sendMessage(this.chat.id, payload)
   }
 
-  // Reply with document
+  /**
+   * Reply with a document.
+   * @param {string} url Document URL
+   * @returns {Promise<object|Error>} API response or error
+   */
   async replyWithDocument(url) {
     this._handled = true
     return this.bot.sendMessage(this.chat.id, {
@@ -59,7 +82,11 @@ class Context {
     })
   }
 
-  // Reply with audio
+  /**
+   * Reply with audio.
+   * @param {string} url Audio URL
+   * @returns {Promise<object|Error>} API response or error
+   */
   async replyWithAudio(url) {
     this._handled = true
     return this.bot.sendMessage(this.chat.id, {
@@ -69,7 +96,11 @@ class Context {
     })
   }
 
-  // Reply with video
+  /**
+   * Reply with video.
+   * @param {string} url Video URL
+   * @returns {Promise<object|Error>} API response or error
+   */
   async replyWithVideo(url) {
     this._handled = true
     return this.bot.sendMessage(this.chat.id, {

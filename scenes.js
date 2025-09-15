@@ -1,9 +1,22 @@
+/**
+ * Represents a multi-step conversational scene.
+ * @class
+ */
 class Scene {
+  /**
+   * Creates a Scene instance.
+   * @param {string} name Scene name
+   * @param {Array<function>} steps Array of step handler functions
+   */
   constructor(name, steps) {
     this.name = name
     this.steps = steps
   }
 
+  /**
+   * Enters the scene and starts at step 0.
+   * @param {Context} ctx
+   */
   async enter(ctx) {
     ctx.session.__scene = this.name
     ctx.session.step = 0
@@ -12,6 +25,10 @@ class Scene {
     await this.handle(ctx)
   }
 
+  /**
+   * Leaves the scene and clears session data.
+   * @param {Context} ctx
+   */
   async leave(ctx) {
     Object.keys(ctx.session).forEach((k) => {
       delete ctx.session[k]
@@ -20,6 +37,10 @@ class Scene {
     ctx._sceneStopped = true
   }
 
+  /**
+   * Handles the current step in the scene.
+   * @param {Context} ctx
+   */
   async handle(ctx) {
     let step = typeof ctx.session.step === 'number' ? ctx.session.step : 0
     if (step < this.steps.length) {
@@ -34,15 +55,30 @@ class Scene {
   }
 }
 
+/**
+ * Manages multiple scenes and provides middleware for scene handling.
+ * @class
+ */
 class SceneManager {
+  /**
+   * Creates a SceneManager instance.
+   */
   constructor() {
     this.scenes = {}
   }
 
+  /**
+   * Registers a scene.
+   * @param {Scene} scene Scene instance
+   */
   register(scene) {
     this.scenes[scene.name] = scene
   }
 
+  /**
+   * Returns middleware for scene handling.
+   * @returns {function} Middleware function
+   */
   middleware() {
     return async (ctx, next) => {
       const sceneName = ctx.session?.__scene
@@ -58,6 +94,11 @@ class SceneManager {
     }
   }
 
+  /**
+   * Returns a function to enter a scene by name.
+   * @param {string} name Scene name
+   * @returns {function} Function to enter scene
+   */
   enter(name) {
     return async (ctx) => {
       const scene = this.scenes[name]

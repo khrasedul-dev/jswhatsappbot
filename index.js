@@ -2,14 +2,32 @@ import axios from 'axios'
 import express from 'express'
 import Context from './context.js'
 import Markup from './markup.js'
-import { sessionStore as defaultSessionStore } from './sessionStore.js'
-import {session} from './session.js'
 import { Scene, SceneManager } from './scenes.js'
-
+import { session } from './session.js'
+import { sessionStore as defaultSessionStore } from './sessionStore.js'
+/**
+ * Main class for WhatsApp bot framework.
+ * Handles middleware, command/event registration, and message sending.
+ * @class
+ */
 class WhatsAppBot {
+  /**
+   * Registers a global error handler.
+   * @param {function} fn Error handler function
+   */
   catch(fn) {
     this.errorHandler = fn
   }
+  /**
+   * Creates a WhatsAppBot instance.
+   * @param {object} options
+   * @param {string} options.accessToken WhatsApp Cloud API access token
+   * @param {string} options.phoneNumberId WhatsApp phone number ID
+   * @param {string} options.verifyToken Webhook verification token
+   * @param {object} [options.sessionStore] Custom session store
+   * @param {function} [options.errorHandler] Error handler
+   * @param {string} [options.apiVersion] WhatsApp API version
+   */
   constructor({
     accessToken,
     phoneNumberId,
@@ -39,19 +57,37 @@ class WhatsAppBot {
     this.app.use(express.json())
   }
 
+  /**
+   * Registers a middleware function.
+   * @param {function} fn Middleware function
+   */
   use(fn) {
     this.middlewares.push(fn)
   }
 
+  /**
+   * Registers an error handler function.
+   * @param {function} fn Error handler function
+   */
   useErrorHandler(fn) {
     this.errorHandler = fn
   }
 
+  /**
+   * Registers an event handler.
+   * @param {string} event Event name
+   * @param {function} fn Handler function
+   */
   on(event, fn) {
     if (!this.handlers[event]) this.handlers[event] = []
     this.handlers[event].push(fn)
   }
 
+  /**
+   * Registers a command handler for text messages.
+   * @param {string|Array<string>} cmd Command(s) to match
+   * @param {function} fn Handler function
+   */
   command(cmd, fn) {
     this.on('message', (ctx) => {
       if (!ctx.text || ctx._handled) return
@@ -73,11 +109,22 @@ class WhatsAppBot {
   }
 
   // WhatsApp does not support postback/callback actions. Use hears() for button actions.
+  /**
+   * No-op for WhatsApp. Included for API compatibility only.
+   * Use hears() for button actions.
+   * @param {*} payload
+   * @param {function} fn
+   */
   action(payload, fn) {
     // No-op for WhatsApp. Included for API compatibility only.
     // Use hears() for button actions.
   }
 
+  /**
+   * Registers a handler for matching text or regex patterns.
+   * @param {string|RegExp|Array<string|RegExp>} pattern Pattern(s) to match
+   * @param {function} fn Handler function
+   */
   hears(pattern, fn) {
     this.on('message', (ctx) => {
       if (!ctx.text || ctx._handled) return
@@ -107,6 +154,10 @@ class WhatsAppBot {
     })
   }
 
+  /**
+   * Runs all registered middlewares for a context.
+   * @param {Context} ctx
+   */
   async runMiddlewares(ctx) {
     let index = -1
     const runner = async (i) => {
@@ -125,6 +176,10 @@ class WhatsAppBot {
     await runner(0)
   }
 
+  /**
+   * Handles an incoming WhatsApp event.
+   * @param {object} event WhatsApp event object
+   */
   async handleEvent(event) {
     const senderId = event.from
     const ctx = new Context(this, event, senderId)
@@ -162,6 +217,12 @@ class WhatsAppBot {
     }
   }
 
+  /**
+   * Sends a message to a WhatsApp user.
+   * @param {string} to Recipient phone number
+   * @param {string|object} textOrPayload Text or message payload
+   * @returns {Promise<object|Error>} API response or error
+   */
   async sendMessage(to, textOrPayload) {
     const url = `https://graph.facebook.com/${this.apiVersion}/${this.phoneNumberId}/messages`
     let data
@@ -201,6 +262,10 @@ class WhatsAppBot {
     }
   }
 
+  /**
+   * Starts the Express server and webhook endpoints.
+   * @param {number} [port=3000] Port to listen on
+   */
   start(port = 3000) {
     // Verification endpoint
     this.app.get('/webhook', (req, res) => {
@@ -240,5 +305,20 @@ class WhatsAppBot {
   }
 }
 
+/**
+ * Markup utility for WhatsApp reply buttons and keyboards.
+ * @see Markup
+ */
+// ...existing code...
+/**
+ * Session middleware for WhatsApp bots.
+ * @see session
+ */
+// ...existing code...
+/**
+ * Scene system for multi-step conversational flows.
+ * @see Scene, SceneManager
+ */
+// ...existing code...
 export default WhatsAppBot
-export { Markup , session , Scene, SceneManager }
+export { Markup, Scene, SceneManager, session }
